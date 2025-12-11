@@ -1,70 +1,293 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+# 🌟 **React Query — (But Interview Ready!)**
 
-In the project directory, you can run:
+## 🟦 **What is React Query?**
 
-### `npm start`
+React Query is like a **smart helper** that brings data from API for you.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Instead of you writing:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* fetch()
+* useEffect()
+* loading states
+* error states
 
-### `npm test`
+React Query says:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> *“Relax… I will fetch the data, store it, remember it, update it, refetch it.”*
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# 🟩 **Why do we use React Query?**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Because **fetching data manually is painful**.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Without React Query →
+❌ You write too much code
+❌ You manage loading
+❌ You manage error
+❌ You store data
+❌ You refresh data manually
 
-### `npm run eject`
+With React Query →
+✅ Auto-loading
+✅ Auto-error
+✅ Auto-caching
+✅ Auto-refetch
+✅ Background updates
+✅ Easy mutations (POST/PUT/DELETE)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# 🟧 **How React Query Works? (Like explaining to a 5-year-old)**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Think React Query as:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+* **Fridge (Cache)** — keeps data saved
+* **Delivery Boy (Query)** — fetches data
+* **New Order (Mutation)** — sends new data
 
-## Learn More
+You simply say:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> “React Query, please get this data for me.”
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+And it does everything.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# 🔵 **Most Important Concepts (Interview)**
 
-### Analyzing the Bundle Size
+## ✔ 1. **Query** (GET data)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+A query fetches & stores data.
 
-### Making a Progressive Web App
+```js
+const { data, isLoading, isError } = useQuery({
+  queryKey: ["posts"],
+  queryFn: () => fetch("https://jsonplaceholder.typicode.com/posts").then(r => r.json()),
+});
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+**queryKey** → unique name
+**queryFn** → API function
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## ✔ 2. **Query Key**
 
-### Deployment
+Like giving a name to the data so React Query remembers it.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Example:
 
-### `npm run build` fails to minify
+* ["posts"]
+* ["post", id]
+* ["user", 1, "comments"]
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Interview line:
+
+> React Query uses queryKey to identify, cache, refetch and update data.
+
+---
+
+## ✔ 3. **Mutation** (POST/PUT/DELETE)
+
+Mutation means **changing data**.
+
+```js
+const mutation = useMutation({
+  mutationFn: (newPost) =>
+    fetch("/posts", {
+      method: "POST",
+      body: JSON.stringify(newPost)
+    }),
+});
+```
+
+Use:
+
+```js
+mutation.mutate({ title: "Hello" });
+```
+
+Interview line:
+
+> Queries are for GET, Mutations are for CREATE/UPDATE/DELETE.
+
+---
+
+## ✔ 4. **Cache**
+
+React Query stores data in memory.
+
+Why?
+Because next time you switch page →
+React Query says *“I already have the data. No need to call API again.”*
+
+---
+
+## ✔ 5. **Stale Time**
+
+How long data is “fresh”.
+
+Example:
+
+```js
+staleTime: 5000   // 5 sec fresh
+```
+
+Interview line:
+
+> Data is fresh → React Query does not refetch
+> Data is stale → It refetches in background.
+
+---
+
+## ✔ 6. **Refetching**
+
+React Query automatically re-fetches when:
+
+* Window focus
+* Network reconnect
+* Stale time over
+
+You can manually:
+
+```js
+refetch();
+```
+
+---
+
+## ✔ 7. **Invalidate Query**
+
+When you change data (after mutation), you must refresh the old data.
+
+```js
+queryClient.invalidateQueries(["posts"]);
+```
+
+Interview line:
+
+> Invalidating tells React Query: “Hey, this data is old. Get new one.”
+
+---
+
+## ✔ 8. **DevTools**
+
+React Query comes with a built-in devtool.
+
+```jsx
+<ReactQueryDevtools initialIsOpen={false} />
+```
+
+You can see:
+
+* cache
+* refetch
+* states
+
+---
+
+## ✔ 9. **Error Handling**
+
+React Query automatically catches errors.
+
+Example:
+
+```js
+if (isError) return "Something went wrong";
+```
+
+---
+
+## ✔ 10. **Query States**
+
+Every query has 4 states:
+
+| State        | Meaning             |
+| ------------ | ------------------- |
+| `isLoading`  | first time fetching |
+| `isError`    | API failed          |
+| `isFetching` | background refetch  |
+| `isSuccess`  | data is ready       |
+
+---
+
+# 🟣 **React Query Short Example (Full Flow)**
+
+```jsx
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+function App() {
+  const queryClient = useQueryClient();
+
+  const postsQuery = useQuery({
+    queryKey: ["posts"],
+    queryFn: () => fetch("/posts").then(res => res.json()),
+  });
+
+  const addPost = useMutation({
+    mutationFn: (newPost) =>
+      fetch("/posts", {
+        method: "POST",
+        body: JSON.stringify(newPost),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+    },
+  });
+
+  if (postsQuery.isLoading) return "Loading...";
+  
+  return (
+    <>
+      <button onClick={() => addPost.mutate({ title: "New Post" })}>
+        Add Post
+      </button>
+
+      {postsQuery.data.map((p) => (
+        <div key={p.id}>{p.title}</div>
+      ))}
+    </>
+  );
+}
+```
+
+---
+
+# 🟢 **Interview Cheat Sheet (Super Short)**
+
+### **Define React Query**
+
+> A library that handles API calls, caching, refetching and updating data automatically.
+
+### **Why use it?**
+
+> To avoid manually managing loading, error, caching and refetch logic.
+
+### **Difference between Query & Mutation**
+
+> Query = Get data.
+> Mutation = Change data.
+
+### **What is Query Key?**
+
+> A unique identifier for caching & refetching.
+
+### **What is Invalidate Query?**
+
+> It refreshes old cached data.
+
+### **What is Stale Time?**
+
+> How long data is considered fresh.
+
+### **What is Cache Time?**
+
+> How long unused data stays in memory.
+
+### **Is React Query a state management tool?**
+
+> No. It is a **server-state management tool**, not client-state.
+
