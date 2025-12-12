@@ -4,6 +4,7 @@
 ![Uploading image.png…]()
 
 
+
 ## 🟦 **What is React Query?**
 
 React Query is like a **smart helper** that brings data from API for you.
