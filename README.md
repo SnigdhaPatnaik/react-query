@@ -1,7 +1,6 @@
 
 
 # 🌟 **React Query — (But Interview Ready!)**
-![Uploading image.png…]()
 
 
 
